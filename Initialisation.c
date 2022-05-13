@@ -59,7 +59,7 @@ void Init(void){
     T0CONbits.TMR0ON=1;//activer  timer0
 /******************************************************************/
      //Timer1                   --> pour lecture distance
-    T1CONbits.T1RUN=1;      //activer timer 1
+    T1CONbits.T1RUN=1;      //
     T1CONbits.RD16=1;       //Mode 16 bits
     T1CONbits.T1CKPS=2;     //prescaler=1:4
     T1CONbits.T1OSCEN=0;    //Oscillator disabled
@@ -72,10 +72,36 @@ void Init(void){
     TMR1H = 0x3C;           //15536
     TMR1L = 0xB0;
 
-    T1CONbits.TMR1ON = 1;
+    T1CONbits.TMR1ON = 1;   //Enables Timer1
 
   /******************************************************************/
+    //Init I2C
+    SSPSTAT = 0x80;	// Slew rate 100KHz
+    SSPCON1 = 0x28;	// Master Mode Enable, Sclock = FOSC/(4 * (SSPADD + 1)) I2C bus,
+    SSPCON2 = 0x00;
+    SSPADD  = 0x13;     // Prediviseur pour SCL = 100KHz a 8MHz
+
+  /******************************************************************/
+    //uart
+    TXSTAbits.SYNC=0;       //Asynchronous mode
+    TXSTAbits.BRGH=1;       //High speed
+    TXSTAbits.TXEN=1;       //transmit enabled
     
+    BAUDCONbits.BRG16=0;    //Baud rate
+
+    RCSTAbits.SPEN=1;       //enable serial port
+    RCSTAbits.CREN=1;       //enables receiver
+
+    
+    PIR1bits.TXIF=0;
+    PIE1bits.TXIE=0;        //Enables the EUSART transmit interrupt
+
+
+  /******************************************************************/
+
+    
+    
+
 
 
     
