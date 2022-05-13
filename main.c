@@ -23,6 +23,8 @@ void main(void){
             TMR1H = 0x3C;           //15536
             TMR1L = 0xB0;
             LATBbits.LATB6=~LATBbits.LATB6;
+
+            //test
        }
        }
     while(1);
