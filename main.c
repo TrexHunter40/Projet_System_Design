@@ -36,5 +36,6 @@ void main(void){
     while(1)
     {
         //bonsoir
+        //ça marche ?
     }
 }
