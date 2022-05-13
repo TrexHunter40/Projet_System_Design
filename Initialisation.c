@@ -7,7 +7,9 @@
 #include <p18f2520.h>
 
 void Init(void){
- 
+
+    TRISBbits.RB5=0;  // RB5 en sortie
+    TRISBbits.RB6=0;  // RB5 en sortie
     //Horloge à 8Mhz
     OSCCONbits.IRCF=7;
 /**********************************************************************/
@@ -42,21 +44,37 @@ void Init(void){
     INTCONbits.GIE = 1;
     INTCONbits.PEIE = 1; // Validation INT Périphériques
 /*****************************************************************/
-    //Timer0    (p125 datasheet)
-    T0CONbits.TMR0ON = 1;       //activer  timer0
-    T0CONbits.T08BIT = 0;       //Timer0 configurer en 16 bits
-    T0CONbits.T0CS = 0;         //source d'horloge interne
-    T0CONbits.T0SE = 1;         //increment on low-to-high transition
-    T0CONbits.PSA = 0;          //prescaler is assigned
-    T0CONbits.T0PS = 1;         //Prescalar selection 1:4 ->0.0000005 *65536*4=0.131 secondes
-    /* Reglage start time pour overflow a 100ms*/  //!!!!!a refaire a chaque fis dans l'interruption
-    TMR0H = 0x3C;
-    TMR0L = 0x94;
+    //Timer0    (p125 datasheet) --> pour it adc
+    T0CONbits.T08BIT=0;//Timer0 configurer en 16 bitsr
+    T0CONbits.T0CS=0;//source d'horloge interne
+    T0CONbits.PSA=0;//prescaler is assigned
+    T0CONbits.T0PS=5;//Prescalar selection 1:64
+    INTCONbits.TMR0IE=1;//enable overflow interrupt
+    T0CONbits.T0SE = 0; //Increment on low-to-high transition on T0CKI pin
+    /* Reglage start time pour overflow a 1s*/  //!!!!!a refaire a chaque fois dans l'interruption
+    TMR0H=0x85; //Start time         1.097152*65536/1.097152 = 34286
+    TMR0L=0xEE;
+
+     T0CONbits.TMR0ON=1;//activer  timer0
 /******************************************************************/
-    //Init I2C
+     //Timer1                   --> pour lecture distance
+    T1CONbits.T1RUN=1;      //activer timer 1
+    T1CONbits.RD16=1;       //Mode 16 bits
+    T1CONbits.T1CKPS=5;     //prescaler=1:4
+    T1CONbits.T1OSCEN=0;    //Oscillator disabled
+    T1CONbits.T1SYNC=0;     //Ignored bit
+    T1CONbits.TMR1CS=0;     //Internal clock
+
+    PIR1bits.TMR1IF=0;
+    PIE1bits.TMR1IE=1;
+    /* Reglage start time pour overflow a 100ms*/
 
 
-    TRISBbits.RB5=0;  // RB5 en sortie
+    T1CONbits.TMR1ON = 1;
+
+  /******************************************************************/
+
+
     
 
     
