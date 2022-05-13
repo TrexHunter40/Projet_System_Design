@@ -29,3 +29,11 @@ void main(void){
 //       }
     while(1);
 }
+
+
+int arret(void)
+{
+  CCPR1L = 0;
+  CCPR2L = 0;
+}
+

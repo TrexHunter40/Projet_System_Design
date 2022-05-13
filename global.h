@@ -8,16 +8,11 @@
 #ifndef GLOBAL_H
 #define	GLOBAL_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-
-
-
-#ifdef	__cplusplus
-}
-#endif
+extern unsigned char marche,nbVmesure;
+extern volatile unsigned long vbat;//sum of vbats
+extern unsigned int CycleMoteurD,CycleMoteurG;
+extern volatile unsigned int led;
+extern volatile unsigned int distance;
+extern unsigned volatile char touche[3];//stores remote button value
 
 #endif	/* GLOBAL_H */
-
