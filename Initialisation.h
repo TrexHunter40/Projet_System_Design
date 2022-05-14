@@ -8,5 +8,6 @@
 #define	INITIALISATION_H
 
 extern void Init(void);
+extern void InitMot(void);
 
 #endif	/* INITIALISATION_H */

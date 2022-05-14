@@ -5,6 +5,11 @@
  */
 
 #include <p18f2520.h>
+#include "global.h"
+#include "Interruptions.h"
+#include "I2C.h"
+#include "main.h"
+
 
 void Init(void){
 
@@ -99,13 +104,50 @@ void Init(void){
 
   /******************************************************************/
 
+    //Premiere ecriture sonar
+    SONAR_Write(0xE0,0x00);
+    SONAR_Write(0xE0,0x51);
+
+}
+  /******************************************************************/
+
+    void InitMot(void){
+    char message[30]="Fin des initialisation\r\n";
+    TRISAbits.RA6=0; //DIRD sortie
+    TRISAbits.RA7=0; // DIRG sotie
+    TRISAbits.RA4=1; //acquisition moteur droit
+    TRISCbits.RC0=1; //acquisition moteur gauche
+
+    /*init Timer 2*/
+    /* Configuration E/S*/
+    TRISCbits.RC1 = 0;          // RC1 en sortie PWM droite
+    TRISCbits.RC2 = 0;          // RC2 en sortie PWM gauche
+
+    /* Configuration TIMER2 */
+    T2CONbits.T2CKPS0 = 1;
+    T2CONbits.T2CKPS1 = 0;      // CLK /4
+    PR2 = 499;                  // Reglage periode FPWM = Fosc/(4*(PR2+1)*PRE)
+    T2CONbits.T2OUTPS=9;        // postscaler = 9
+
+    /* Reglage rapport cyclique */
+    CCP1CONbits.DC1B0 = 0;
+    CCP1CONbits.DC1B1 = 0;
+    CCP2CONbits.DC2B0 = 0;
+    CCP2CONbits.DC2B1 = 0;
+
+    /* Selection Mode PWM */
+    CCP1CONbits.CCP1M3 = 1;
+    CCP1CONbits.CCP1M2 = 1;
+    CCP2CONbits.CCP2M3 = 1;
+    CCP2CONbits.CCP2M2 = 1;
     
-    
+    /* Configuration interruption TMR2*/
+    PIE1bits.TMR2IE=0;  // Validation TMR2IF (TMR2IP =1 par défault)
+    INTCONbits.PEIE=1;  //Validation des interruptions des périphériques
+    T2CONbits.TMR2ON = 1;    //Lance le moteur
+    CCPR1L = CycleMoteurD * 2.5;
+    CCPR2L = CycleMoteurG * 2.5;
+    INTCONbits.GIE=1;  // Validation globale des INT     //?
+    ecrireChar(message);
 
-
-
-    
-
-
-    
 }
