@@ -13,8 +13,8 @@
 
 void Init(void){
 
-//    TRISBbits.RB5=0;  // RB5 en sortie
-//    TRISBbits.RB6=0;  // RB5 en sortie
+    TRISBbits.RB5=0;  // RB5 en sortie
+    TRISBbits.RB6=0;  // RB5 en sortie
     //Horloge à 8Mhz
     OSCCONbits.IRCF=7;
 /**********************************************************************/

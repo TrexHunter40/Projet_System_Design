@@ -30,7 +30,8 @@ void HighISR(void)
         INTCONbits.TMR0IF = 0;
         TMR0H = 0x3C;               //Interruption toutes les 100ms
         TMR0L = 0xB0;               //0x3CB0 = 15536
-        ADCON0bits.GO = 1;
+        LATBbits.LATB5=~LATBbits.LATB5;
+        ADCON0bits.GO = 1;          //On relance le timer
     }
 
 
