@@ -13,11 +13,13 @@
 
 volatile char str[30]="vbat=|0";
 char msg_arret[30] = "Arret moteurs\r\n";
+char msg_bat[30]= "vbat=";
 unsigned int i=0,j=0,k=0;//variables inc
 char val[12]="";        //vbat value str
 volatile unsigned int tmr1tick = 0;
 volatile unsigned int flagdebounce = 1;
 volatile unsigned long vreal=0;//vbat mid value
+volatile unsigned long vrealconv = 0;
 //high priority vector
 #pragma code HighVector=0x08
 void IntHighVector(void)
@@ -64,39 +66,40 @@ void HighISR(void)
         TMR0H=0x85;//Interruption toutes les secondes
         TMR0L=0xEE;
         ADCON0bits.GO=1;
+//        PIR1bits.ADIF=1;
     }
    
    //Ecrire Vbat
-   if(PIR1bits.TXIF&&PIE1bits.TXIE)
-   {
-        PIR1bits.TXIF=0;
-        if(str[i]!='|') //vbat=|xx
-        {
-             TXREG=str[i];
-             i++;
-             k=(int)(12*(double)vreal/49088.0); //49088            
-        }
-        else{
-            
-            while(k!=0) //int to char
-            {
-                val[j]=k%10+48;
-                k/=10;
-                j++;
-            }
-            if(j>0)//invert
-            {
-                j--;
-                TXREG=val[j];
-            }
-            else //reinit + retour chariot
-            {
-                TXREG=13;
-                i=0;j=0;k=0;
-                PIE1bits.TXIE=0;
-            }
-        }
-   }
+//   if(PIR1bits.TXIF&&PIE1bits.TXIE)
+//   {
+//        PIR1bits.TXIF=0;
+//        if(str[i]!='|') //vbat=|xx
+//        {
+//             TXREG=str[i];
+//             i++;
+//             k=(int)(16*(double)vreal/65535.0); //49088
+//        }
+//        else{
+//
+//            while(k!=0) //int to char
+//            {
+//                val[j]=k%10+48;
+//                k/=10;
+//                j++;
+//            }
+//            if(j>0)//invert
+//            {
+//                j--;
+//                TXREG=val[j];
+//            }
+//            else //reinit + retour chariot
+//            {
+//                TXREG=13;
+//                i=0;j=0;k=0;
+//                PIE1bits.TXIE=0;
+//            }
+//        }
+//   }
 
    
    //IT ADC
@@ -116,6 +119,11 @@ void HighISR(void)
       }
       else if(nbVmesure==8){
           vreal=vbat/8;
+          //
+          vrealconv = vreal*16/65472.0/3.2;
+          ecrireChar(msg_bat);
+          ecrireInt(vrealconv);
+          //
           PIE1bits.TXIE=1;
           vbat=0;
           nbVmesure=0;

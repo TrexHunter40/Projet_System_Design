@@ -34,7 +34,9 @@ void main(void) {
 
             avancerPhase2();
         }
-        if(marche==0) arret();
+        if(marche==0){
+            arret();
+        }
     }
 }
 
