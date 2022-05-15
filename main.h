@@ -1,8 +1,8 @@
 /* 
  * File:   main.h
- * Author: simon
+ * Author: AMEUR
  *
- * Created on 19 mai 2021, 21:41
+ * Created on 03 may 2022
  */
 
 #ifndef MAIN_H

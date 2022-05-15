@@ -1,8 +1,8 @@
 /* 
  * File:   Initialisation.h
- * Author: vadier
+ * Author: AMEUR
  *
- * Created on 7 mai 2021, 14:19
+ * Created on 03 may 2022
  */
 
 #ifndef INITIALISATION_H

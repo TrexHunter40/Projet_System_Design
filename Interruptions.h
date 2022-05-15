@@ -1,8 +1,8 @@
 /* 
  * File:   Interruption.h
- * Author: simon
+ * Author: AMEUR
  *
- * Created on 7 mai 2021, 14:18
+ * Created on 03 may 2022
  */
 
 #ifndef INTERRUPTION_H

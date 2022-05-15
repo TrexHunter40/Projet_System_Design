@@ -1,8 +1,8 @@
 /*
  * File:   Initialisation.c
- * Author: vadier
+ * Author: AMEUR
  *
- * Created on 7 mai 2021, 13:55
+ * Created on 03 may 2022
  */
 
 #include <p18f2520.h>
@@ -96,7 +96,7 @@ void Initialisation(){
 }
 
 void InitialiserMoteurs(void){
-    char message[30]="Fin des initialisation\r\n";
+    char message[30]="Fin des initialisations\r\n";
     TRISAbits.RA6=0; //DIRD sortie
     TRISAbits.RA7=0; // DIRG sotie
     TRISAbits.RA4=1; //acquisition moteur droit

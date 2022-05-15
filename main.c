@@ -46,11 +46,11 @@ void tempo(unsigned int T){
 int avancerPhase1(void){
     char message1[30]="Demarrage phase 1\r\n";
     char message12[30] = "Fin phase 1 \r\n";
-    led = 0b10111111 & led; //allumage deuxieme led
+    led = 0b10111111 & led;         //allumage deuxieme led
     Write_PCF8574(0x40, led);
     ecrireChar(message1);
-    PORTAbits.RA6=1;
-    PORTAbits.RA7=1;
+    PORTAbits.RA6=1;            //allumer led DIRD_D
+    PORTAbits.RA7=1;            //allumer led DIR_G
     
     while(distance>45 && distance<160 && marche==1)
     {
@@ -108,4 +108,6 @@ int arret(void)
 {
   CCPR1L = 0;
   CCPR2L = 0;
+  PORTAbits.RA6=0;  //eteindre led DIR_D
+  PORTAbits.RA7=0;  //eteindre led DIR_G
 }

@@ -1,8 +1,8 @@
 /*
  * File:   interruption.c
- * Author: vadier
+ * Author: AMEUR
  *
- * Created on 7 mai 2021, 13:57
+ * Created on 03 may 2022
  */
 
 #include <p18cxxx.h>
