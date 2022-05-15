@@ -6,7 +6,7 @@
 *													   *
 *													   *
 *	Compilateur MCC18								   *
-*	Auteur 								   *
+*	Auteur P. GENTRIC								   *
 *	Version 1										   *
 *******************************************************/
 
@@ -153,7 +153,7 @@ do											// up to 10 times MAX
 		{
 			while ((SSPCON2 & 0x1F) || (SSPSTATbits.R_W));  // ensure module is idle
 	 		SSPBUF = Send_Buff[index];		// Ecrit octet
-	 		while(SSPSTATbits.BF);	// Attente buffer TX vide
+	 		while(SSPSTATbits.BF);                  // Attente buffer TX vide
 	 		while(SSPCON2bits.ACKSTAT);	//Attente ACK slave
 	 	}while(Send_Buff[index++]);
 

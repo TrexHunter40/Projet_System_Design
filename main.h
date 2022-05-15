@@ -1,13 +1,13 @@
-/*File: main.h
- * Author: Yazid
+/* 
+ * File:   main.h
+ * Author: simon
  *
- * Created on 9 May 2022, 9:31
+ * Created on 19 mai 2021, 21:41
  */
 
 #ifndef MAIN_H
 #define	MAIN_H
 
-void main();
 void tempo(unsigned int T);
 int avancerPhase1(void);
 int avancerPhase2(void);

@@ -1,13 +1,15 @@
-/*File: Initialisation.h
- * Author: Yazid
+/* 
+ * File:   Initialisation.h
+ * Author: vadier
  *
- * Created on 2 May 2022, 15:55
+ * Created on 7 mai 2021, 14:19
  */
 
 #ifndef INITIALISATION_H
 #define	INITIALISATION_H
 
-extern void Init(void);
-extern void InitMot(void);
+void Initialisation (void);
+void InitialiserMoteurs(void);
 
 #endif	/* INITIALISATION_H */
+

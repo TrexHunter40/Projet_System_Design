@@ -1,8 +1,8 @@
 /* 
  * File:   I2C.h
- * Author: leoch
+ * Author: simon
  *
- * Created on 13 mai 2022, 16:19
+ * Created on 7 mai 2021, 14:16
  */
 
 #ifndef I2C_H
@@ -23,5 +23,6 @@ char Ecrire_i2c_Telecom(char adresse_i2c, char* Send_Buff);
 char Write_PCF8574(char adresse_i2c, char data );
 
 #endif	/* I2C_H */
+
 
 
