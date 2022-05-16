@@ -38,14 +38,14 @@ void HighISR(void)
    if(INTCONbits.INT0IF) //if flag = 1
    {
       INTCONbits.INT0IF = 0; //flag = 0
-      Ecrire_i2c_Telecom(0xA2, 0x33);       //demande à la telecommande
-      while(Detecte_i2c(0xA2));//ack
+      //Ecrire_i2c_Telecom(0xA2, 0x33);       //demande à la telecommande
+      //while(Detecte_i2c(0xA2));//ack
       Lire_i2c_Telecom(0xA2, touche);//lecture
-      ecrireChar(touche[1]);
+     
       if(touche[1]==0x33)//bouton marche/arrêt (0x33)
       {
           
-        if(flagdebounce == 1){
+       // if(flagdebounce == 1){
           if(marche==0)
           {
               marche = 1;
@@ -61,7 +61,7 @@ void HighISR(void)
               Write_PCF8574(0x40, led);
               flagdebounce = 0;
           }
-        }
+        //}
       }
    }
    //IT Timer0
@@ -103,7 +103,7 @@ void HighISR(void)
           vrealconv = 10*5*vreal/255;
           ecrireChar(msg_bat);
           ecrireInt(vrealconv);
-          ecrireChar(msg_dV);
+          //ecrireChar(msg_dV);
           //
           PIE1bits.TXIE=1;
           vbat=0;

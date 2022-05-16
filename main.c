@@ -23,7 +23,7 @@ unsigned volatile char touche[3];
 void main(void) {
     Initialisation();
     InitialiserMoteurs();
-    marche=0;
+    marche=1;
     while(1)
     {
         if (marche==1)
