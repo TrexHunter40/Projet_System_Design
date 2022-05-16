@@ -13,13 +13,16 @@
 
 volatile char str[30]="vbat=|0";
 char msg_arret[30] = "Arret moteurs\r\n";
+char msg_dV[30] = "dV\r\n";
 char msg_bat[30]= "vbat=";
+char msg_defaut_bat[30] = "defaut batterie\r\n";
 unsigned int i=0,j=0,k=0;//variables inc
 char val[12]="";        //vbat value str
 volatile unsigned int tmr1tick = 0;
 volatile unsigned int flagdebounce = 1;
-volatile unsigned long vreal=0;//vbat mid value
-volatile unsigned long vrealconv = 0;
+
+unsigned float vreal=0;//vbat mid value
+unsigned float vrealconv = 0;
 //high priority vector
 #pragma code HighVector=0x08
 void IntHighVector(void)
@@ -38,8 +41,10 @@ void HighISR(void)
       Ecrire_i2c_Telecom(0xA2, 0x33);       //demande à la telecommande
       while(Detecte_i2c(0xA2));//ack
       Lire_i2c_Telecom(0xA2, touche);//lecture
+      ecrireChar(touche[1]);
       if(touche[1]==0x33)//bouton marche/arrêt (0x33)
       {
+          
         if(flagdebounce == 1){
           if(marche==0)
           {
@@ -63,43 +68,13 @@ void HighISR(void)
    if(INTCONbits.TMR0IF)
    {
         INTCONbits.TMR0IF=0;
-        TMR0H=0x85;//Interruption toutes les secondes
+        TMR0H=0x85;             //Interruption toutes les secondes
         TMR0L=0xEE;
         ADCON0bits.GO=1;
+//        LATBbits.LATB4=~LATBbits.LATB4;
 //        PIR1bits.ADIF=1;
     }
    
-   //Ecrire Vbat
-//   if(PIR1bits.TXIF&&PIE1bits.TXIE)
-//   {
-//        PIR1bits.TXIF=0;
-//        if(str[i]!='|') //vbat=|xx
-//        {
-//             TXREG=str[i];
-//             i++;
-//             k=(int)(16*(double)vreal/65535.0); //49088
-//        }
-//        else{
-//
-//            while(k!=0) //int to char
-//            {
-//                val[j]=k%10+48;
-//                k/=10;
-//                j++;
-//            }
-//            if(j>0)//invert
-//            {
-//                j--;
-//                TXREG=val[j];
-//            }
-//            else //reinit + retour chariot
-//            {
-//                TXREG=13;
-//                i=0;j=0;k=0;
-//                PIE1bits.TXIE=0;
-//            }
-//        }
-//   }
 
    
    //IT ADC
@@ -107,22 +82,28 @@ void HighISR(void)
    {
       ADCON0bits.GO=0;
       PIR1bits.ADIF=0;
-      vbat+=ADRESH*256+ADRESL & 0x0000FFFF;
+      //
+//      LATBbits.LATB6=~LATBbits.LATB6;
+      //
+      vbat+=ADRESH;//*256+ADRESL & 0x0000FFFF;
       nbVmesure++;
-      if(nbVmesure==8 && vbat/8<31424){// 2,4V ~ 8V -> 31424
+      if(nbVmesure==8 && vbat/8<122){   //
           PORTBbits.RB5 = 1;
           led = 0b11111110;             //allumage derniere led
           Write_PCF8574(0x40, led);
-          //shut down moteur & reinit
+          //shut down moteur
+          //ecrireChar(msg_defaut_bat);
           arret();
           marche=0;
       }
       else if(nbVmesure==8){
-          vreal=vbat/8;
+          vreal=vbat/8.0;
           //
-          vrealconv = vreal*16/65472.0/3.2;
+          //vrealconv = vreal*16/65472.0/3.2;
+          vrealconv = 10*5*vreal/255;
           ecrireChar(msg_bat);
           ecrireInt(vrealconv);
+          ecrireChar(msg_dV);
           //
           PIE1bits.TXIE=1;
           vbat=0;
@@ -137,6 +118,9 @@ void HighISR(void)
    
      //Timer 1
    if(PIR1bits.TMR1IF){
+       //
+//       LATBbits.LATB7=~LATBbits.LATB7;
+       //
        PIR1bits.TMR1IF=0;
        TMR1H = 0x3C;
        TMR1L = 0xB0;
@@ -146,6 +130,8 @@ void HighISR(void)
            SONAR_Write(0xE0,0x00);
            SONAR_Write(0xE0,0x51);
        }
+
+       
        if(flagdebounce == 0 ) {
            tmr1tick++;
            if(tmr1tick == 5) {

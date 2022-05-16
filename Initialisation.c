@@ -15,6 +15,11 @@
 
 
 void Initialisation(){
+
+//    TRISBbits.RB4=0;
+//    TRISBbits.RB6=0;
+//    TRISBbits.RB7=0;
+
     OSCCONbits.IRCF=7; //Horloge à 8Mhz		
     //On valide les interruptions
     INTCONbits.INT0IE = 1;
