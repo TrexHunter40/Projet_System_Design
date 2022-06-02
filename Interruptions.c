@@ -72,7 +72,6 @@ void HighISR(void)
         TMR0L=0xEE;
         ADCON0bits.GO=1;
 //        LATBbits.LATB4=~LATBbits.LATB4;
-//        PIR1bits.ADIF=1;
     }
    
 
@@ -105,7 +104,7 @@ void HighISR(void)
           ecrireInt(vrealconv);
           //ecrireChar(msg_dV);
           //
-          PIE1bits.TXIE=1;
+          
           vbat=0;
           nbVmesure=0;
       }
@@ -127,7 +126,7 @@ void HighISR(void)
        if(marche == 1) {
            distance=SONAR_Read(0xE0,0x02);
            ecrireInt(distance);
-           SONAR_Write(0xE0,0x00);
+           //SONAR_Write(0xE0,0x00);
            SONAR_Write(0xE0,0x51);
        }
 

@@ -23,14 +23,16 @@ unsigned volatile char touche[3];
 void main(void) {
     Initialisation();
     InitialiserMoteurs();
-    marche=1;
+    marche=0;
     while(1)
     {
+        //CCPR1L = 70;
+        //CCPR2L = 70;
         if (marche==1)
         {
-            tempo(520000);
+            //tempo(520000);
             avancerPhase1();
-            tempo(520000);
+            //tempo(520000);
 
             avancerPhase2();
         }
@@ -51,15 +53,12 @@ int avancerPhase1(void){
     led = 0b10111111 & led;         //allumage deuxieme led
     Write_PCF8574(0x40, led);
     ecrireChar(message1);
-    PORTAbits.RA6=1;            //allumer led DIRD_D
-    PORTAbits.RA7=1;            //allumer led DIR_G
+
     
     while(distance>45 && distance<160 && marche==1)
     {
-        CycleMoteurD = 30; // <50
-        CycleMoteurG = 30;
-        CCPR1L = CycleMoteurD * 2.5;
-        CCPR2L = CycleMoteurG * 2.5;
+        CCPR1L = 30 ;
+        CCPR2L = 30 ;
     }
     arret();
     ecrireChar(message12);
@@ -74,16 +73,14 @@ int avancerPhase2(void){
     led = 0b11011111 & led;//allumage troisieme led
     Write_PCF8574(0x40, led);
     ecrireChar(message2);
-    PORTAbits.RA6=1;
-    PORTAbits.RA7=1;
+
 
     while(marche==1)
     {
         if(distance>60) {
-            CycleMoteurD = 40; // <50
-            CycleMoteurG = 40;
-            CCPR1L = CycleMoteurD * 2.5;
-            CCPR2L = CycleMoteurG * 2.5;
+            
+            CCPR1L = 30 ;
+            CCPR2L = 30 ;
         }
         else {
             arret();
@@ -114,6 +111,4 @@ int arret(void)
 {
   CCPR1L = 0;
   CCPR2L = 0;
-  PORTAbits.RA6=0;  //eteindre led DIR_D
-  PORTAbits.RA7=0;  //eteindre led DIR_G
 }

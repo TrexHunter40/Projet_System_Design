@@ -54,10 +54,7 @@ void Initialisation(){
 
     ADCON0bits.GO=1;//launch converter
 
-    //peripheral and core interrupt
-    INTCONbits.PEIE = 1;
-    INTCONbits.GIE = 1;
-
+ 
     //Timer 0 
     T0CONbits.TMR0ON=1;//Enable timer0
     T0CONbits.T08BIT=0;//16 bits timer
@@ -96,7 +93,7 @@ void Initialisation(){
     T1CONbits.TMR1ON = 1;
 
     //Premiere ecriture sonar
-    SONAR_Write(0xE0,0x00);
+    //SONAR_Write(0xE0,0x00);
     SONAR_Write(0xE0,0x51); //Demande de distance en cm
 }
 
@@ -106,15 +103,18 @@ void InitialiserMoteurs(void){
     TRISAbits.RA7=0; // DIRG sotie
     TRISAbits.RA4=1; //acquisition moteur droit
     TRISCbits.RC0=1; //acquisition moteur gauche
+    
+    PORTAbits.RA6=1;
+    PORTAbits.RA7=1;
     /*init Timer 2*/
     /* Configuration E/S*/
     TRISCbits.RC1 = 0;          // RC1 en sortie PWM droite
     TRISCbits.RC2 = 0;          // RC2 en sortie PWM gauche
 
-    /* Configuration TIMER2 */
-    T2CONbits.T2CKPS0 = 1;
-    T2CONbits.T2CKPS1 = 0;      // CLK /4       
-    PR2 = 499;                  // Reglage periode FPWM = Fosc/(4*(PR2+1)*PRE)     
+    /* Configuration TIMER2 */  //p146
+    T2CONbits.T2CKPS0 = 0;
+    T2CONbits.T2CKPS1 = 1;      // Prescaler = 16
+    PR2 = 125;                  // Reglage periode FPWM = Fosc/(4*(PR2+1)*PRE)
     T2CONbits.T2OUTPS=9;        // postscaler = 9       
     /* Reglage rapport cyclique */
     CCP1CONbits.DC1B0 = 0;
@@ -130,8 +130,7 @@ void InitialiserMoteurs(void){
     PIE1bits.TMR2IE=0;  // Validation TMR2IF (TMR2IP =1 par défault)     
     INTCONbits.PEIE=1;  //Validation des interruptions des périphériques 
     T2CONbits.TMR2ON = 1;    //Lance le moteur
-    CCPR1L = CycleMoteurD * 2.5;
-    CCPR2L = CycleMoteurG * 2.5;
+    
     INTCONbits.GIE=1;  // Validation globale des INT     //?
     ecrireChar(message);
 }
