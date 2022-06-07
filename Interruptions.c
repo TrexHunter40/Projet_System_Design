@@ -84,26 +84,33 @@ void HighISR(void)
       //
 //      LATBbits.LATB6=~LATBbits.LATB6;
       //
-      vbat+=ADRESH;//*256+ADRESL & 0x0000FFFF;
+      vbat+=ADRESH;
       nbVmesure++;
-      if(nbVmesure==8 && vbat/8<122){   //
+      if(nbVmesure==8 && vbat/8<133){   //
+          vreal=vbat/8.0;
+          ecrireInt(vreal);
           PORTBbits.RB5 = 1;
-          led = 0b11111110;             //allumage derniere led
+          led = 0b11111110 & led;             //allumage derniere led
           Write_PCF8574(0x40, led);
           //shut down moteur
           //ecrireChar(msg_defaut_bat);
+          nbVmesure=0;
           arret();
           marche=0;
       }
       else if(nbVmesure==8){
+          PORTBbits.RB5 = 0;
+          led = 0b00000001 | led;//eteint dernière led
+           Write_PCF8574(0x40, led);
           vreal=vbat/8.0;
+          ecrireInt(vreal);
           //
           //vrealconv = vreal*16/65472.0/3.2;
           vrealconv = 10*5*vreal/255;
-          ecrireChar(msg_bat);
-          ecrireInt(vrealconv);
-          //ecrireChar(msg_dV);
+          //ecrireChar(msg_bat);
+          //ecrireInt(vrealconv);
           //
+          
           
           vbat=0;
           nbVmesure=0;
@@ -111,9 +118,9 @@ void HighISR(void)
    }
    
    //Timer 2
-   if(PIR1bits.TMR2IF){
-        PIR1bits.TMR2IF=0;
-   }
+//   if(PIR1bits.TMR2IF){
+//        PIR1bits.TMR2IF=0;
+//   }
    
      //Timer 1
    if(PIR1bits.TMR1IF){

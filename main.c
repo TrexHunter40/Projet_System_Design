@@ -52,7 +52,8 @@ int avancerPhase1(void){
     char message12[30] = "Fin phase 1 \r\n";
     led = 0b10111111 & led;         //allumage deuxieme led
     Write_PCF8574(0x40, led);
-    ecrireChar(message1);
+    //printf("Demarrage phase 1\r\n");
+//    ecrireChar(message1);
 
     
     while(distance>45 && distance<160 && marche==1)
@@ -61,7 +62,8 @@ int avancerPhase1(void){
         CCPR2L = 30 ;
     }
     arret();
-    ecrireChar(message12);
+    //printf("Fin phase 1 \r\n");
+//    ecrireChar(message12);
     led = 0b01000000 | led;//eteint deuxieme led
     Write_PCF8574(0x40, led);
     return 1;
@@ -72,7 +74,8 @@ int avancerPhase2(void){
     char message22[30] = "Fin phase 2 \r\n";
     led = 0b11011111 & led;//allumage troisieme led
     Write_PCF8574(0x40, led);
-    ecrireChar(message2);
+    //printf("Demarrage phase 2\r\n");
+//    ecrireChar(message2);
 
 
     while(marche==1)
@@ -87,7 +90,8 @@ int avancerPhase2(void){
             
         }
     }
-    ecrireChar(message22);
+    //printf("Fin phase 2\r\n");
+//    ecrireChar(message22);
     led = 0b00100000 | led;//eteint troisieme led
     Write_PCF8574(0x40, led);
     return 1;

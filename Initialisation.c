@@ -27,7 +27,7 @@ void Initialisation(){
     //Desactivation des infrarouges
     PORTBbits.RB1 = 1;                                       
     //ADC -> p225-227
-    TRISBbits.RB5=0;//output led test
+    TRISBbits.RB5=0;        //output led test
     //TRISAbits.RA2=1;                                      
     ADCON1bits.VCFG=0;//Vref- = Vss & Vref+ =VDD
     ADCON1bits.PCFG=12;//Port AN2 opened                    
@@ -77,6 +77,7 @@ void Initialisation(){
     TXSTAbits.TXEN=1;//transmit enable
     PIR1bits.TXIF=0;
     PIE1bits.TXIE=0;
+    //PIE1bits.RCIE = 0;
     RCSTAbits.CREN=1;//enables receiver
 
      //Init Timer1
