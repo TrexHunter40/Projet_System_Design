@@ -16,33 +16,29 @@
 
 void Initialisation(){
 
-//    TRISBbits.RB4=0;
-//    TRISBbits.RB6=0;
-//    TRISBbits.RB7=0;
-
-    OSCCONbits.IRCF=7; //Horloge à 8Mhz		
+    OSCCONbits.IRCF=7; //Horloge à 8Mhz
+    
     //On valide les interruptions
     INTCONbits.INT0IE = 1;
     INTCON2bits.INTEDG0 = 0; //Front descendant interruption 0
+
     //Desactivation des infrarouges
-    PORTBbits.RB1 = 1;                                       
+    PORTBbits.RB1 = 1;
+    
     //ADC -> p225-227
     TRISBbits.RB5=0;        //output led test
     //TRISAbits.RA2=1;                                      
     ADCON1bits.VCFG=0;//Vref- = Vss & Vref+ =VDD
-    ADCON1bits.PCFG=12;//Port AN2 opened                    
-    //ADCON2bits.ADCS=6;//Fosc/8 1
-    //
+    ADCON1bits.PCFG=12;//Port AN2 opened
+    
     ADCON2bits.ADCS2  = 0;     // 8Tosc Tad>0.7 us
     ADCON2bits.ADCS1 = 0;
     ADCON2bits.ADCS0 = 1;
-    //
-   // ADCON2bits.ACQT=7;//4 TAD 3
-    //
+
     ADCON2bits.ACQT2 = 0;   //6Tad (p.128 du cours) -> Tacq >4.2 us
     ADCON2bits.ACQT1 = 1;
     ADCON2bits.ACQT0 = 1;
-    //
+
     ADCON0bits.CHS=2;//Channel 2 ->AN2
     ADCON2bits.ADFM=0;//Format left justified
     ADCON0bits.ADON=1;//Enable converter
@@ -77,7 +73,6 @@ void Initialisation(){
     TXSTAbits.TXEN=1;//transmit enable
     PIR1bits.TXIF=0;
     PIE1bits.TXIE=0;
-    //PIE1bits.RCIE = 0;
     RCSTAbits.CREN=1;//enables receiver
 
      //Init Timer1

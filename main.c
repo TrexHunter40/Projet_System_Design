@@ -26,13 +26,10 @@ void main(void) {
     marche=0;
     while(1)
     {
-        //CCPR1L = 70;
-        //CCPR2L = 70;
         if (marche==1)
         {
-            //tempo(520000);
+            
             avancerPhase1();
-            //tempo(520000);
 
             avancerPhase2();
         }
@@ -42,10 +39,6 @@ void main(void) {
     }
 }
 
-
-void tempo(unsigned int T){
-    unsigned int j;
-    for(j=0;j<T;j++);}
 	
 int avancerPhase1(void){
     char message1[30]="Demarrage phase 1\r\n";
