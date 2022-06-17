@@ -51,8 +51,8 @@ int avancerPhase1(void){
     
     while(distance>45 && distance<160 && marche==1)
     {
-        CCPR1L = 30 ;
-        CCPR2L = 30 ;
+        CCPR1L = 50 ;
+        CCPR2L = 45 ;
     }
     arret();
     //printf("Fin phase 1 \r\n");
@@ -75,8 +75,8 @@ int avancerPhase2(void){
     {
         if(distance>60) {
             
-            CCPR1L = 30 ;
-            CCPR2L = 30 ;
+            CCPR1L = 50 ;
+            CCPR2L = 45 ;
         }
         else {
             arret();
@@ -85,7 +85,7 @@ int avancerPhase2(void){
     }
     //printf("Fin phase 2\r\n");
 //    ecrireChar(message22);
-    led = 0b00100000 | led;//eteint troisieme led
+    led = 0b00100000 | led;         //eteint troisieme led
     Write_PCF8574(0x40, led);
     return 1;
 }

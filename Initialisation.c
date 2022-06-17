@@ -110,7 +110,7 @@ void InitialiserMoteurs(void){
     /* Configuration TIMER2 */  //p146
     T2CONbits.T2CKPS0 = 0;
     T2CONbits.T2CKPS1 = 1;      // Prescaler = 16
-    PR2 = 125;                  // Reglage periode FPWM = Fosc/(4*(PR2+1)*PRE)
+    PR2 = 124;                  // Reglage periode FPWM = Fosc/(4*(PR2+1)*PRE)
     T2CONbits.T2OUTPS=9;        // postscaler = 9       
     /* Reglage rapport cyclique */
     CCP1CONbits.DC1B0 = 0;
