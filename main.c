@@ -23,15 +23,15 @@ unsigned volatile char touche[3];
 void main(void) {
     Initialisation();
     InitialiserMoteurs();
-    marche=0;
+    
     while(1)
     {
         if (marche==1)
         {
             
-            avancerPhase1();
+            phase1();
 
-            avancerPhase2();
+            phase2();
         }
         if(marche==0){
             arret();
@@ -40,40 +40,40 @@ void main(void) {
 }
 
 	
-int avancerPhase1(void){
+int phase1(void){
     char message1[30]="Demarrage phase 1\r\n";
     char message12[30] = "Fin phase 1 \r\n";
     led = 0b10111111 & led;         //allumage deuxieme led
     Write_PCF8574(0x40, led);
     //printf("Demarrage phase 1\r\n");
-//    ecrireChar(message1);
+//    printf("%s",message1);
 
     
-    while(distance>45 && distance<160 && marche==1)
+    while(distance>40 && distance<150 && marche==1)
     {
         CCPR1L = 50 ;
         CCPR2L = 45 ;
     }
     arret();
     //printf("Fin phase 1 \r\n");
-//    ecrireChar(message12);
+//    printf("%s",message12);
     led = 0b01000000 | led;//eteint deuxieme led
     Write_PCF8574(0x40, led);
     return 1;
 }
 
-int avancerPhase2(void){
-    char message2[30]="Demarrage phase 2\r\n";
-    char message22[30] = "Fin phase 2 \r\n";
+int phase2(void){
+    char message2[]="Demarrage phase 2\r\n";
+    char message22[] = "Fin phase 2 \r\n";
     led = 0b11011111 & led;//allumage troisieme led
     Write_PCF8574(0x40, led);
     //printf("Demarrage phase 2\r\n");
-//    ecrireChar(message2);
+//    printf("%s", message2);
 
 
     while(marche==1)
     {
-        if(distance>60) {
+        if(distance>50) {
             
             CCPR1L = 50 ;
             CCPR2L = 45 ;
@@ -84,24 +84,10 @@ int avancerPhase2(void){
         }
     }
     //printf("Fin phase 2\r\n");
-//    ecrireChar(message22);
+    //printf("%s",message22);
     led = 0b00100000 | led;         //eteint troisieme led
     Write_PCF8574(0x40, led);
     return 1;
-}
-
-
-//message uart
-void ecrireChar(char c[30]){
-    printf("%s",c);
-}
-
-void ecrireInt( int k){
-    printf("%d",k);
-}
-
-void ecrireFloat (float k){
-    printf("%f\r",k);
 }
 
 int arret(void)

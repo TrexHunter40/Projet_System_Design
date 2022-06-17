@@ -128,7 +128,7 @@ void InitialiserMoteurs(void){
     T2CONbits.TMR2ON = 1;    //Lance le moteur
     
     INTCONbits.GIE=1;  // Validation globale des INT     //?
-    ecrireChar(message);
+    printf("%s",  message);
 
     marche=0;
 }

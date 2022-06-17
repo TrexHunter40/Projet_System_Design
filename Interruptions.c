@@ -55,7 +55,7 @@ void HighISR(void)
           else
             {
               marche = 0;
-              ecrireChar(msg_arret);
+              printf("%s",msg_arret);
               led = 0b10000000 | led;   //allumage deuxieme led
               Write_PCF8574(0x40, led);
               flagdebounce = 0;
@@ -88,11 +88,11 @@ void HighISR(void)
       if(nbVmesure==8 && vbat/8<133){   //
           vreal=vbat/8.0;
           vrealconv = vreal*(5/255) *3.2 + 0.7;
-          ecrireInt(vrealconv*1000);
+          printf("%d",vrealconv*1000);
           PORTBbits.RB5 = 1;
           led = 0b11111110 & led;             //allumage derniere led
           Write_PCF8574(0x40, led);
-          //ecrireChar(msg_defaut_bat);
+          //printf("%s",msg_defaut_bat);
           nbVmesure=0;
           arret();
           marche=0;
@@ -102,10 +102,10 @@ void HighISR(void)
           led = 0b00000001 | led;//eteint dernière led
           Write_PCF8574(0x40, led);
           vreal=vbat/8.0;
-          //ecrireInt(vreal);
+          printf("%d",vreal);
           vrealconv = vreal*(5/255) *3.2 + 0.7;
-          //ecrireChar(msg_bat);
-          ecrireInt(vrealconv*1000); //ecrit en mV  
+          //printf("%s",msg_bat);
+          printf("%d",vrealconv*1000); //ecrit en mV
           
           vbat=0;
           nbVmesure=0;
@@ -127,7 +127,7 @@ void HighISR(void)
        TMR1L = 0xB0;
        if(marche == 1) {
            distance=SONAR_Read(0xE0,0x02);
-           ecrireInt(distance);
+           printf("%d",distance);
            //SONAR_Write(0xE0,0x00);
            SONAR_Write(0xE0,0x51);
        }
