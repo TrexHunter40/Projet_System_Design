@@ -88,11 +88,11 @@ void HighISR(void)
       nbVmesure++;
       if(nbVmesure==8 && vbat/8<133){   //
           vreal=vbat/8.0;
-          ecrireInt(vreal);
+          vrealconv = vreal*(5/255) *3.2 + 0.7;
+          ecrireInt(vrealconv*1000);
           PORTBbits.RB5 = 1;
           led = 0b11111110 & led;             //allumage derniere led
           Write_PCF8574(0x40, led);
-          //shut down moteur
           //ecrireChar(msg_defaut_bat);
           nbVmesure=0;
           arret();
@@ -101,16 +101,12 @@ void HighISR(void)
       else if(nbVmesure==8){
           PORTBbits.RB5 = 0;
           led = 0b00000001 | led;//eteint dernière led
-           Write_PCF8574(0x40, led);
+          Write_PCF8574(0x40, led);
           vreal=vbat/8.0;
-          ecrireInt(vreal);
-          //
-          //vrealconv = vreal*16/65472.0/3.2;
-          vrealconv = 10*5*vreal/255;
+          //ecrireInt(vreal);
+          vrealconv = vreal*(5/255) *3.2 + 0.7;
           //ecrireChar(msg_bat);
-          //ecrireInt(vrealconv);
-          //
-          
+          ecrireInt(vrealconv*1000); //ecrit en mV  
           
           vbat=0;
           nbVmesure=0;
