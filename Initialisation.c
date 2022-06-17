@@ -69,11 +69,11 @@ void Initialisation(){
     TXSTAbits.BRGH=1;//High speed
     BAUDCONbits.BRG16=0;//Baud rate 8 bits
     SPBRG=51;
-    RCSTAbits.SPEN=1;
-    TXSTAbits.TXEN=1;//transmit enable
+    RCSTAbits.SPEN=1;   //serial port enabled
+    TXSTAbits.TXEN=1;   //transmit enabled
     PIR1bits.TXIF=0;
     PIE1bits.TXIE=0;
-    RCSTAbits.CREN=1;//enables receiver
+    RCSTAbits.CREN=1;   //enables receiver
 
      //Init Timer1
     T1CONbits.RD16=1;//16 bits operation

@@ -44,7 +44,7 @@ void HighISR(void)
       if(touche[1]==0x33)//bouton marche/arrêt (0x33)
       {
           
-       // if(flagdebounce == 1){
+       if(flagdebounce == 1){
           if(marche==0)
           {
               marche = 1;
@@ -60,7 +60,7 @@ void HighISR(void)
               Write_PCF8574(0x40, led);
               flagdebounce = 0;
           }
-        //}
+        }
       }
    }
    //IT Timer0
@@ -112,11 +112,6 @@ void HighISR(void)
       }
    }
    
-   //Timer 2
-//   if(PIR1bits.TMR2IF){
-//        PIR1bits.TMR2IF=0;
-//   }
-   
      //Timer 1
    if(PIR1bits.TMR1IF){
        //
@@ -126,7 +121,7 @@ void HighISR(void)
        TMR1H = 0x3C;
        TMR1L = 0xB0;
        if(marche == 1) {
-           distance=SONAR_Read(0xE0,0x02);
+           distance=SONAR_Read(0xE0,0x02) - 6; //-3 car calibrage
            printf("%d",distance);
            //SONAR_Write(0xE0,0x00);
            SONAR_Write(0xE0,0x51);
@@ -135,7 +130,7 @@ void HighISR(void)
        
        if(flagdebounce == 0 ) {
            tmr1tick++;
-           if(tmr1tick == 5) {
+           if(tmr1tick == 3) {      //300ms
                flagdebounce = 1;
                tmr1tick = 0;
            }
