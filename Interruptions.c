@@ -11,13 +11,12 @@
 #include "main.h"
 #include "I2C.h"
 
-volatile char str[30]="vbat=|0";
-char msg_arret[30] = "Arret moteurs\r\n";
-char msg_dV[30] = "dV\r\n";
-char msg_bat[30]= "vbat=";
-char msg_defaut_bat[30] = "defaut batterie\r\n";
+char msg_arret[] = "Arret moteurs\r\n";
+//char msg_mV[] = " mV\r\n";
+char msg_bat[]= "vbat=";
+char msg_defaut_bat[] = "defaut batterie\r\n";
 unsigned int i=0,j=0,k=0;//variables inc
-char val[12]="";        //vbat value str
+char val[]="";        //vbat value str
 volatile unsigned int tmr1tick = 0;
 volatile unsigned int flagdebounce = 1;
 

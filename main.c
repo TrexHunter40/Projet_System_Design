@@ -97,11 +97,11 @@ void ecrireChar(char c[30]){
 }
 
 void ecrireInt( int k){
-    printf("%d\r\n",k);
+    printf("%d",k);
 }
 
 void ecrireFloat (float k){
-    printf("%f\r\n",k);
+    printf("%f\r",k);
 }
 
 int arret(void)

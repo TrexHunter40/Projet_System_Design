@@ -129,4 +129,6 @@ void InitialiserMoteurs(void){
     
     INTCONbits.GIE=1;  // Validation globale des INT     //?
     ecrireChar(message);
+
+    marche=0;
 }
