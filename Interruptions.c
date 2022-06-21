@@ -10,6 +10,7 @@
 #include "global.h"
 #include "main.h"
 #include "I2C.h"
+#include <stdio.h>
 
 char msg_arret[] = "Arret moteurs\r\n";
 //char msg_mV[] = " mV\r\n";
