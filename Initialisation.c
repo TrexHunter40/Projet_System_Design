@@ -10,7 +10,6 @@
 #include "global.h"
 #include "Interruptions.h"
 #include "I2C.h"
-#include "main.h"
 #include <stdio.h>
 
 
@@ -69,7 +68,7 @@ void Initialisation(){
     TXSTAbits.SYNC=0;//Asynchronous mode
     TXSTAbits.BRGH=1;//High speed
     BAUDCONbits.BRG16=0;//Baud rate 8 bits
-    SPBRG=51;
+    SPBRG=103;
     RCSTAbits.SPEN=1;   //serial port enabled
     TXSTAbits.TXEN=1;   //transmit enabled
     PIR1bits.TXIF=0;
@@ -95,7 +94,6 @@ void Initialisation(){
 }
 
 void InitialiserMoteurs(void){
-    char message[30]="Fin des initialisations\r\n";
     TRISAbits.RA6=0; //DIRD sortie
     TRISAbits.RA7=0; // DIRG sotie
     TRISAbits.RA4=1; //acquisition moteur droit
@@ -129,7 +127,7 @@ void InitialiserMoteurs(void){
     T2CONbits.TMR2ON = 1;    //Lance le moteur
     
     INTCONbits.GIE=1;  // Validation globale des INT     //?
-    printf("%s",  message);
+    printf("Fin des initialisations\r\n");
 
     marche=0;
 }

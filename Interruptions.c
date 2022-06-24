@@ -8,21 +8,17 @@
 #include <p18cxxx.h>
 #include "Interruptions.h"
 #include "global.h"
-#include "main.h"
 #include "I2C.h"
 #include <stdio.h>
 
-char msg_arret[] = "Arret moteurs\r\n";
-//char msg_mV[] = " mV\r\n";
-char msg_bat[]= "vbat=";
-char msg_defaut_bat[] = "defaut batterie\r\n";
 unsigned int i=0,j=0,k=0;//variables inc
 char val[]="";        //vbat value str
 volatile unsigned int tmr1tick = 0;
 volatile unsigned int flagdebounce = 1;
 
-unsigned float vreal=0;//vbat mid value
-unsigned float vrealconv = 0;
+int vreal=0;//vbat mid value
+float vrealconv = 0;
+int bruh;
 //high priority vector
 #pragma code HighVector=0x08
 void IntHighVector(void)
@@ -49,6 +45,7 @@ void HighISR(void)
           if(marche==0)
           {
               marche = 1;
+              //printf("Appui bouton telecommande\r\n");
               led = 0b01111111 & led;   //allumage premiere led
               Write_PCF8574(0x40, led);
               flagdebounce = 0;
@@ -56,7 +53,7 @@ void HighISR(void)
           else
             {
               marche = 0;
-              printf("%s",msg_arret);
+              //printf("Appui bouton telecommande\r\n");
               led = 0b10000000 | led;   //allumage deuxieme led
               Write_PCF8574(0x40, led);
               flagdebounce = 0;
@@ -71,7 +68,6 @@ void HighISR(void)
         TMR0H=0x85;             //Interruption toutes les secondes
         TMR0L=0xEE;
         ADCON0bits.GO=1;
-//        LATBbits.LATB4=~LATBbits.LATB4;
     }
    
 
@@ -81,50 +77,52 @@ void HighISR(void)
    {
       ADCON0bits.GO=0;
       PIR1bits.ADIF=0;
-      //
-//      LATBbits.LATB6=~LATBbits.LATB6;
-      //
+
       vbat+=ADRESH;
+      //printf("%d\r\n", ADRESH);
+      //printf("%ld\r\n", vbat);
       nbVmesure++;
-      if(nbVmesure==8 && vbat/8<133){   //
-          vreal=vbat/8.0;
-          vrealconv = vreal*(5/255) *3.2 + 0.7;
-          printf("%d",vrealconv*1000);
-          PORTBbits.RB5 = 1;
-          led = 0b11111110 & led;             //allumage derniere led
-          Write_PCF8574(0x40, led);
-          //printf("%s",msg_defaut_bat);
+      //printf("mesure: %d\r\n", nbVmesure);
+      if(nbVmesure==8){
+          vreal = vbat >> 3;
+          vrealconv = vreal/15.9375 +0.7; //  x/15.9375 = x*(5/255)*3.2
+          bruh = vrealconv*1000;
           nbVmesure=0;
-          arret();
-          marche=0;
-      }
-      else if(nbVmesure==8){
-          PORTBbits.RB5 = 0;
-          led = 0b00000001 | led;//eteint dernière led
-          Write_PCF8574(0x40, led);
-          vreal=vbat/8.0;
-          printf("%d",vreal);
-          vrealconv = vreal*(5/255) *3.2 + 0.7;
-          //printf("%s",msg_bat);
-          printf("%d",vrealconv*1000); //ecrit en mV
-          
           vbat=0;
-          nbVmesure=0;
-      }
+
+          if (bruh<9000){
+
+              //printf("%d\r\n",vrealconv);
+              PORTBbits.RB5 = 1;
+              led = 0b11111110 & led;             //allumage derniere led
+              Write_PCF8574(0x40, led);
+              printf("Défaut batterie ! Tension actuelle : %d mV\r\n", bruh);
+              arret();
+              marche=0;
+            }
+          else {
+            PORTBbits.RB5 = 0;
+            led = 0b00000001 | led;//eteint dernière led
+            Write_PCF8574(0x40, led);
+            
+            //printf("vbat: %ld\r\n", vbat);
+            //printf("vreal: %d\r\n", vreal);
+            //printf("vbat=");
+            printf("Vbat = %d mV\r\n",bruh); //ecrit en mV
+          
+            } 
+       }
    }
    
      //Timer 1
    if(PIR1bits.TMR1IF){
-       //
-//       LATBbits.LATB7=~LATBbits.LATB7;
-       //
+       
        PIR1bits.TMR1IF=0;
        TMR1H = 0x3C;
        TMR1L = 0xB0;
        if(marche == 1) {
-           distance=SONAR_Read(0xE0,0x02) - 6; //-3 car calibrage
-           printf("%d",distance);
-           //SONAR_Write(0xE0,0x00);
+           distance=SONAR_Read(0xE0,0x02);
+           //printf("%d",distance);
            SONAR_Write(0xE0,0x51);
        }
 

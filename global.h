@@ -9,11 +9,15 @@
 #define	GLOBAL_H
 
 extern unsigned char marche,nbVmesure;
-extern volatile unsigned long vbat;//sum of vbats
+extern volatile unsigned int vbat;//sum of vbats
 extern unsigned int CycleMoteurD,CycleMoteurG;
 extern volatile unsigned int led;
 extern volatile unsigned int distance;
 extern unsigned volatile char touche[3];//stores remote button value
+
+int arret(void);
+int phase1(void);
+int phase2(void);
 
 //Ajouts
 //extern unsigned int ad_led = 0x40;
