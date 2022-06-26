@@ -18,7 +18,6 @@ void Initialisation(){
 
     OSCCONbits.IRCF=7; //Horloge à 8Mhz
     
-    //On valide les interruptions
     INTCONbits.INT0IE = 1;
     INTCON2bits.INTEDG0 = 0; //Front descendant interruption 0
 
@@ -56,7 +55,7 @@ void Initialisation(){
     T0CONbits.T08BIT=0;//16 bits timer
     T0CONbits.T0CS=0;//Clock source internal
     T0CONbits.PSA=0;//prescaler is assigned
-    T0CONbits.T0PS=5;//Prescalar selection 1:64
+    T0CONbits.T0PS=5;//Prescaler selection 1:64
     INTCONbits.TMR0IE=1;//enable overflow interrupt
     TMR0H=0x85;//Start time (to overflow at 1s)
     TMR0L=0xEE;
@@ -65,14 +64,12 @@ void Initialisation(){
     MI2CInit();
 
     //uart
-    TXSTAbits.SYNC=0;//Asynchronous mode
-    TXSTAbits.BRGH=1;//High speed
+    TXSTAbits.SYNC=0;   //Asynchronous mode
+    TXSTAbits.BRGH=1;   //High speed
     BAUDCONbits.BRG16=0;//Baud rate 8 bits
     SPBRG=103;
     RCSTAbits.SPEN=1;   //serial port enabled
     TXSTAbits.TXEN=1;   //transmit enabled
-    PIR1bits.TXIF=0;
-    PIE1bits.TXIE=0;
     RCSTAbits.CREN=1;   //enables receiver
 
      //Init Timer1
@@ -89,7 +86,6 @@ void Initialisation(){
     T1CONbits.TMR1ON = 1;
 
     //Premiere ecriture sonar
-    //SONAR_Write(0xE0,0x00);
     SONAR_Write(0xE0,0x51); //Demande de distance en cm
 }
 
@@ -110,7 +106,7 @@ void InitialiserMoteurs(void){
     T2CONbits.T2CKPS0 = 0;
     T2CONbits.T2CKPS1 = 1;      // Prescaler = 16
     PR2 = 124;                  // Reglage periode FPWM = Fosc/(4*(PR2+1)*PRE)
-    T2CONbits.T2OUTPS=9;        // postscaler = 9       
+    
     /* Reglage rapport cyclique */
     CCP1CONbits.DC1B0 = 0;
     CCP1CONbits.DC1B1 = 0;
@@ -122,12 +118,13 @@ void InitialiserMoteurs(void){
     CCP2CONbits.CCP2M3 = 1;     
     CCP2CONbits.CCP2M2 = 1;     
     /* Configuration interruption TMR2*/
-    PIE1bits.TMR2IE=0;  // Validation TMR2IF (TMR2IP =1 par défault)     
+    PIE1bits.TMR2IE=0;  // Validation TMR2IF      
     INTCONbits.PEIE=1;  //Validation des interruptions des périphériques 
     T2CONbits.TMR2ON = 1;    //Lance le moteur
     
     INTCONbits.GIE=1;  // Validation globale des INT     //?
+    marche=0;
     printf("Fin des initialisations\r\n");
 
-    marche=0;
+    
 }

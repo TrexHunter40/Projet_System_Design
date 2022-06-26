@@ -16,13 +16,9 @@ extern volatile unsigned int distance;
 extern unsigned volatile char touche[3];//stores remote button value
 
 int arret(void);
-int phase1(void);
-int phase2(void);
 
-//Ajouts
-//extern unsigned int ad_led = 0x40;
-//extern unsigned int ad_tel = 0xA2;
-//extern unsigned int ad_sonar = 0xE0;
+
 
 #endif	/* GLOBAL_H */
 
+    

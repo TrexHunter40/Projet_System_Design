@@ -12,6 +12,9 @@
 #pragma config PBADEN = OFF, WDT = OFF, LVP = OFF, DEBUG = ON
 
 
+int phase1(void);
+int phase2(void);
+
 unsigned char marche,nbVmesure;
 volatile unsigned int vbat;
 unsigned int CycleMoteurD,CycleMoteurG;
@@ -42,7 +45,7 @@ void main(void) {
 int phase1(void){
     led = 0b10111111 & led;         //allumage deuxieme led
     Write_PCF8574(0x40, led);
-    //printf("Demarrage phase 1\r\n");
+    printf("Demarrage phase 1\r\n");
 
 
     
@@ -52,7 +55,7 @@ int phase1(void){
         CCPR2L = 45 ;
     }
     arret();
-    //printf("Fin phase 1 \r\n");
+    printf("Fin phase 1 \r\n");
     led = 0b01000000 | led;//eteint deuxieme led
     Write_PCF8574(0x40, led);
     return 1;
@@ -61,7 +64,7 @@ int phase1(void){
 int phase2(void){
     led = 0b11011111 & led;//allumage troisieme led
     Write_PCF8574(0x40, led);
-    //printf("Demarrage phase 2\r\n");
+    printf("Demarrage phase 2\r\n");
 
 
 
@@ -77,10 +80,10 @@ int phase2(void){
             
         }
     }
-    //printf("Fin phase 2\r\n");
+    printf("Fin phase 2\r\n");
     led = 0b00100000 | led;         //eteint troisieme led
     Write_PCF8574(0x40, led);
-    //printf("Arrêt du robot\r\n");
+    printf("Arrêt du robot\r\n");
     return 1;
 }
 

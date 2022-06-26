@@ -16,9 +16,9 @@ char val[]="";        //vbat value str
 volatile unsigned int tmr1tick = 0;
 volatile unsigned int flagdebounce = 1;
 
-int vreal=0;//vbat mid value
+int vreal=0;    //moyenne de vbat
 float vrealconv = 0;
-int bruh;
+int val_mv;
 //high priority vector
 #pragma code HighVector=0x08
 void IntHighVector(void)
@@ -34,8 +34,7 @@ void HighISR(void)
    if(INTCONbits.INT0IF) //if flag = 1
    {
       INTCONbits.INT0IF = 0; //flag = 0
-      //Ecrire_i2c_Telecom(0xA2, 0x33);       //demande à la telecommande
-      //while(Detecte_i2c(0xA2));//ack
+
       Lire_i2c_Telecom(0xA2, touche);//lecture
      
       if(touche[1]==0x33)//bouton marche/arrêt (0x33)
@@ -79,24 +78,21 @@ void HighISR(void)
       PIR1bits.ADIF=0;
 
       vbat+=ADRESH;
-      //printf("%d\r\n", ADRESH);
-      //printf("%ld\r\n", vbat);
       nbVmesure++;
-      //printf("mesure: %d\r\n", nbVmesure);
       if(nbVmesure==8){
           vreal = vbat >> 3;
           vrealconv = vreal/15.9375 +0.7; //  x/15.9375 = x*(5/255)*3.2
-          bruh = vrealconv*1000;
+          val_mv = vrealconv*1000;
           nbVmesure=0;
           vbat=0;
 
-          if (bruh<9000){
+          if (val_mv<9000){
 
               //printf("%d\r\n",vrealconv);
               PORTBbits.RB5 = 1;
               led = 0b11111110 & led;             //allumage derniere led
               Write_PCF8574(0x40, led);
-              printf("Défaut batterie ! Tension actuelle : %d mV\r\n", bruh);
+              printf("Défaut batterie ! Tension actuelle : %d mV\r\n", val_mv);
               arret();
               marche=0;
             }
@@ -105,10 +101,7 @@ void HighISR(void)
             led = 0b00000001 | led;//eteint dernière led
             Write_PCF8574(0x40, led);
             
-            //printf("vbat: %ld\r\n", vbat);
-            //printf("vreal: %d\r\n", vreal);
-            //printf("vbat=");
-            printf("Vbat = %d mV\r\n",bruh); //ecrit en mV
+            printf("Vbat = %d mV\r\n",val_mv); //ecrit en mV
           
             } 
        }
